@@ -25,9 +25,9 @@ Console.WriteLine($"Part Two: {ComputeSolution(10)}");
 
 int ComputeSolution(int numberOfKnots)
 {
-    var knots = new (int X, int Y)[numberOfKnots];
+    var knots = new (double X, double Y)[numberOfKnots];
 
-    var tailPositions = new List<(int X, int Y)>();
+    var tailPositions = new List<(double X, double Y)>();
     tailPositions.Add((0,0));
 
     foreach (string line in content)
@@ -55,25 +55,15 @@ int ComputeSolution(int numberOfKnots)
 
             for (int i = 0;i < numberOfKnots - 1;i++)
             {
-                if (knots[i].X - knots[i+1].X > 1)
+                if (Math.Abs(knots[i].X - knots[i+1].X) == 2)
                 {
-                    knots[i+1].X++;
-                    knots[i+1].Y = knots[i].Y;
+                    knots[i+1].X += (knots[i].X - knots[i+1].X) / 2;
+                    knots[i+1].Y += Math.Round((knots[i].Y - knots[i+1].Y) / 2, MidpointRounding.AwayFromZero);
                 }
-                else if (knots[i].X - knots[i+1].X < -1)
+                else if (Math.Abs(knots[i].Y - knots[i+1].Y) == 2)
                 {
-                    knots[i+1].X--;
-                    knots[i+1].Y = knots[i].Y;
-                }
-                else if (knots[i].Y - knots[i+1].Y > 1)
-                {
-                    knots[i+1].Y++;
-                    knots[i+1].X = knots[i].X;
-                }
-                else if (knots[i].Y - knots[i+1].Y < -1)
-                {
-                    knots[i+1].Y--;
-                    knots[i+1].X = knots[i].X;
+                    knots[i+1].Y += (knots[i].Y - knots[i+1].Y) / 2;
+                    knots[i+1].X += Math.Round((knots[i].X - knots[i+1].X) / 2, MidpointRounding.AwayFromZero);
                 }
 
                 tailPositions.Add(knots[numberOfKnots-1]);
@@ -148,8 +138,4 @@ bool GetInputFile(string cookieValue, string inputFilename)
     {
         return false;
     }
-}
-
-class knot {
-
 }
